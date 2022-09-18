@@ -1,13 +1,16 @@
 import './styles/main.css';
 
 import * as Dialog from '@radix-ui/react-dialog';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { SwiperSlide } from 'swiper/react';
 
 import logoImg from './assets/Logo.svg';
+import Carrousel from './Carrousel';
 import { CreateAdBanner } from './components/CreateAdBanner';
 import { CreateAdModal } from './components/CreateAdModal';
 import { GameBanner } from './components/GameBanner';
-import axios from 'axios';
+
 
 interface Game {
    id: string;
@@ -32,21 +35,25 @@ function App() {
 
 
    return (
-      <div className="max-w-[1344px] mx-auto flex flex-col items-center my-20">
-         <img src={logoImg} alt="logo" />
-         <h1 className='text-6xl text-white font-black mt-20'>
+
+      <div className='max-w-6xl h-[100vh] mx-auto flex flex-col justify-around px-5'>
+         <img src={logoImg} alt="logo" className='mx-auto w-60 sm:w-80 '/>
+         <h1 className='text-3xl text-white font-black text-center sm:text-6xl'>
             Seu <span className='text-transparent bg-nlw-gradient bg-clip-text'>duo</span> está aqui
          </h1>
 
-         <div className="grid grid-cols-6 gap-6 mt-16">
+         <Carrousel>
+            {
+               Games.map(game => {
+                  return (
+                     <SwiperSlide key={game.id}>
+                        <GameBanner title={game.title} anuncios={game._count.ads} url={game.bannerUrl} />
+                     </SwiperSlide>
+                  )
+               })
+            }
+         </Carrousel>
 
-            {Games.map(game => {
-               return (
-                  <GameBanner key={game.id} title={game.title} anuncios={game._count.ads} url={game.bannerUrl} />
-               )
-            })}
-
-         </div>
 
          <Dialog.Root>
             <CreateAdBanner />
@@ -55,6 +62,7 @@ function App() {
 
 
       </div>
+
    )
 
 }
